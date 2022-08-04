@@ -23,6 +23,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AppTest {
+   private MyMap myMap;
+   private ArticleService articleService;
+   private static final int TEST_DATA_SIZE = 10;
+   AppTest(){
+      myMap = Container.getObj(MyMap.class);
+      articleService = Container.getObj(ArticleService.class);
+   }
    @BeforeAll
    public void BeforeAll() {
       MyMap myMap = Container.getObj(MyMap.class);
@@ -42,9 +49,9 @@ public class AppTest {
    }
 
    private void makeArticleTestData() {
-      MyMap myMap = Container.getObj(MyMap.class);
 
-      IntStream.rangeClosed(1, 3).forEach(no -> {
+
+      IntStream.rangeClosed(1, TEST_DATA_SIZE).forEach(no -> {
          boolean isBlind = false;
          String title = "제목%d".formatted(no);
          String body = "내용%d".formatted(no);
@@ -67,23 +74,19 @@ public class AppTest {
    }
    @Test
     public void 존재한다(){
-       ArticleService articleService = Container.getObj(ArticleService.class);
+
 
        assertThat(articleService).isNotNull();
    }
 
    @Test
     public void getArticles(){
-       ArticleService articleService = Container.getObj(ArticleService.class);
-
        List<ArticleDto> articleDtoList = articleService.getArticles();
-       assertThat(articleDtoList.size()).isEqualTo(3);
+       assertThat(articleDtoList.size()).isEqualTo(TEST_DATA_SIZE);
    }
 
    @Test
    public void getArticleById(){
-      ArticleService articleService = Container.getObj(ArticleService.class);
-
       ArticleDto articleDto = articleService.getArticleById(1);
 
       assertThat(articleDto.getId()).isEqualTo(1L);
@@ -96,16 +99,12 @@ public class AppTest {
 
    @Test
    public void Count(){
-      ArticleService articleService = Container.getObj(ArticleService.class);
-
       long articlesCount = articleService.getArticlesCount();
-      assertThat(articlesCount).isEqualTo(3);
+      assertThat(articlesCount).isEqualTo(TEST_DATA_SIZE);
    }
 
    @Test
    public void write(){
-      ArticleService articleService = Container.getObj(ArticleService.class);
-
       long newArticleId = articleService.write("제목 new", "내용 new", false);
 
       ArticleDto articleDto = articleService.getArticleById(newArticleId);
@@ -120,8 +119,6 @@ public class AppTest {
 
    @Test
    public void modify(){
-      ArticleService articleService = Container.getObj(ArticleService.class);
-
       articleService.modify(1,"제목 new","내용 new",true);
 
       ArticleDto articleDto = articleService.getArticleById(1);
@@ -137,8 +134,6 @@ public class AppTest {
    }
    @Test
    public void delete(){
-      ArticleService articleService = Container.getObj(ArticleService.class);
-
       articleService.delete(1);
 
       ArticleDto articleDto = articleService.getArticleById(1);
