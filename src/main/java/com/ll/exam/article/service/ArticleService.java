@@ -18,11 +18,15 @@ public class ArticleService {
 
     }
 
-    public ArticleDto getArticleById(int id) {
+    public ArticleDto getArticleById(long id) {
         return articleRepository.getArticleById(id);
     }
 
     public long getArticlesCount() {
         return articleRepository.getArticlesCount();
+    }
+
+    public long write(String title, String body, boolean isBlind) {
+        return articleRepository.write(title, body, isBlind);
     }
 }
