@@ -12,7 +12,9 @@ public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
-    public List<ArticleDto> getArticles() {
+
+    public List<ArticleDto> getArticles(){
         return articleRepository.getArticles();
+
     }
 }
